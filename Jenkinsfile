@@ -6,7 +6,7 @@ pipeline {
             agent { label 'master' }
             
             steps {
-
+                echo 'clean...'
             }            
         }
         
@@ -14,7 +14,7 @@ pipeline {
             agent { label 'master' }
             
             steps {
-
+                echo 'build-test...'
             }  
         }
         
@@ -22,7 +22,7 @@ pipeline {
             agent { label 'master' }
             
             steps {
-
+                echo 'sonar...'
             }              
         }
         
@@ -30,7 +30,7 @@ pipeline {
             agent { label 'master' }
             
             steps {
-
+                echo 'publish...'
             }              
         }
         
@@ -38,7 +38,7 @@ pipeline {
             agent { label 'prod' }
             
             steps {
-
+                echo 'deploy...'
             }              
         }
     }
