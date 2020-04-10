@@ -37,6 +37,10 @@ pipeline {
         stage('deploy') {
             agent { label 'prod' }
             
+            options {
+                skipDefaultCheckout true
+            }            
+            
             steps {
                 echo 'deploy...'
             }              
