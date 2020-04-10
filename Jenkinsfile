@@ -1,21 +1,45 @@
 pipeline {
-    agent any
+    agent none
 
     stages {
-        stage('Build') {
+        stage('clean') {
+            agent { label 'master' }
+            
             steps {
-                echo 'Building..'
-            }
+
+            }            
         }
-        stage('Test') {
+        
+        stage('build-test') {
+            agent { label 'master' }
+            
             steps {
-                echo 'Testing..'
-            }
+
+            }  
         }
-        stage('Deploy') {
+        
+        stage('sonar') {
+            agent { label 'master' }
+            
             steps {
-                echo 'Deploying....'
-            }
+
+            }              
+        }
+        
+        stage('publish') {
+            agent { label 'master' }
+            
+            steps {
+
+            }              
+        }
+        
+        stage('deploy') {
+            agent { label 'prod' }
+            
+            steps {
+
+            }              
         }
     }
 }
