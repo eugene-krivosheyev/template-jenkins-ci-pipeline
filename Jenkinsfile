@@ -12,6 +12,7 @@ pipeline {
         
         stage('build-test') {
             agent { label 'master' }
+            options { skipDefaultCheckout true }            
             
             steps {
                 echo 'build-test...'
@@ -20,6 +21,7 @@ pipeline {
         
         stage('sonar') {
             agent { label 'master' }
+            options { skipDefaultCheckout true }            
             
             steps {
                 echo 'sonar...'
@@ -28,6 +30,7 @@ pipeline {
         
         stage('publish') {
             agent { label 'master' }
+            options { skipDefaultCheckout true }
             
             steps {
                 echo 'publish...'
@@ -36,10 +39,7 @@ pipeline {
         
         stage('deploy') {
             agent { label 'prod' }
-            
-            options {
-                skipDefaultCheckout true
-            }            
+            options { skipDefaultCheckout true }
             
             steps {
                 echo 'deploy...'
