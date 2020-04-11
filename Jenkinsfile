@@ -1,57 +1,56 @@
 pipeline {
     agent none
+    options {
+        skipDefaultCheckout()
+        skipStagesAfterUnstable()
+    }
 
     stages {
-        stage('clean') {
-            agent { label 'agent' }
-            
+        stage('checkout') {
+            agent { node { label 'agent' } }
+
             steps {
-                echo 'clean...'
-            }            
+                checkout scm
+            }
         }
-        
-        stage('build-test') {
-            agent { label 'agent' }
-            options { skipDefaultCheckout true }            
-            
+
+        stage('clean-build-test-qa-publish') {
+            agent { node { label 'agent' } }
+
             steps {
-                echo 'build-test...'
-            }  
+                sh 'mvn clean deploy'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
         }
-        
-        stage('sonar') {
-            agent { label 'agent' }
-            options { skipDefaultCheckout true }            
-            
+
+
+        stage('transfer') {
+            agent { node { label 'prod' } }
+
             steps {
-                echo 'sonar...'
-            }              
-        }
-        
-        stage('publish') {
-            agent { label 'agent' }
-            options { skipDefaultCheckout true }
-            
-            steps {
-                echo 'publish...'
-            }              
+                sh 'mvn org.apache.maven.plugins:maven-dependency-plugin:2.4:get -Dtransitive=false -Ddest=/opt/app/app.jar.new -DremoteRepositories=artifacts::::http://1.1.1.1.:8081/artifactory/app -Dartifact=com.acme:app:1.0-SNAPSHOT'
+            }
         }
 
         stage('deploy-db-schema') {
-            agent { label 'prod' }
-            options { skipDefaultCheckout true }
+            agent { node { label 'prod' } }
 
             steps {
-                echo 'deploy-db-schema...'
+                sh 'mvn liquibase:update'
             }
         }
 
         stage('deploy-application') {
-            agent { label 'prod' }
-            options { skipDefaultCheckout true }
+            agent { node { label 'prod' } }
             
             steps {
-                echo 'deploy-application...'
+                sh 'service app stop'
+                sh 'mv /opt/app/app.jar.new /opt/app/app.jar'
+                sh 'service app start'
             }              
         }
     }
