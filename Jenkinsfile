@@ -36,13 +36,31 @@ pipeline {
                 echo 'publish...'
             }              
         }
-        
-        stage('deploy') {
+
+        stage('deploy-db-schema') {
+            agent { label 'prod' }
+            options { skipDefaultCheckout true }
+
+            steps {
+                echo 'deploy-db-schema...'
+            }
+        }
+
+        stage('pack-container') {
+            agent { label 'prod' }
+            options { skipDefaultCheckout true }
+
+            steps {
+                echo 'pack-container...'
+            }
+        }
+
+        stage('deploy-application') {
             agent { label 'prod' }
             options { skipDefaultCheckout true }
             
             steps {
-                echo 'deploy...'
+                echo 'deploy-application...'
             }              
         }
     }
