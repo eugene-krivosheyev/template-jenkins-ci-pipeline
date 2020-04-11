@@ -3,7 +3,7 @@ pipeline {
 
     stages {
         stage('clean') {
-            agent { label 'master' }
+            agent { label 'agent' }
             
             steps {
                 echo 'clean...'
@@ -11,7 +11,7 @@ pipeline {
         }
         
         stage('build-test') {
-            agent { label 'master' }
+            agent { label 'agent' }
             options { skipDefaultCheckout true }            
             
             steps {
@@ -20,7 +20,7 @@ pipeline {
         }
         
         stage('sonar') {
-            agent { label 'master' }
+            agent { label 'agent' }
             options { skipDefaultCheckout true }            
             
             steps {
@@ -29,7 +29,7 @@ pipeline {
         }
         
         stage('publish') {
-            agent { label 'master' }
+            agent { label 'agent' }
             options { skipDefaultCheckout true }
             
             steps {
@@ -43,15 +43,6 @@ pipeline {
 
             steps {
                 echo 'deploy-db-schema...'
-            }
-        }
-
-        stage('pack-container') {
-            agent { label 'prod' }
-            options { skipDefaultCheckout true }
-
-            steps {
-                echo 'pack-container...'
             }
         }
 
