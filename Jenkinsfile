@@ -18,11 +18,11 @@ pipeline {
             agent { node { label 'agent' } }
 
             steps {
-                echo sh 'mvn clean deploy'
+                echo 'sh \'mvn clean deploy\''
             }
             post {
                 always {
-                    echo "junit 'target/surefire-reports/*.xml'"
+                    echo 'junit \'target/surefire-reports/*.xml\''
                 }
             }
         }
@@ -32,7 +32,7 @@ pipeline {
             agent { node { label 'prod' } }
 
             steps {
-                echo "sh 'mvn org.apache.maven.plugins:maven-dependency-plugin:2.4:get -Dtransitive=false -Ddest=/opt/app/app.jar.new -DremoteRepositories=artifacts::::http://1.1.1.1.:8081/artifactory/app -Dartifact=com.acme:app:1.0-SNAPSHOT'"
+                echo 'sh \'mvn org.apache.maven.plugins:maven-dependency-plugin:2.4:get -Dtransitive=false -Ddest=/opt/app/app.jar.new -DremoteRepositories=artifacts::::http://1.1.1.1.:8081/artifactory/app -Dartifact=com.acme:app:1.0-SNAPSHOT\''
             }
         }
 
@@ -40,7 +40,7 @@ pipeline {
             agent { node { label 'prod' } }
 
             steps {
-                echo "sh 'mvn liquibase:update'"
+                echo 'sh \'mvn liquibase:update\''
             }
         }
 
@@ -48,9 +48,9 @@ pipeline {
             agent { node { label 'prod' } }
             
             steps {
-                echo "sh 'service app stop'"
-                echo "sh 'mv /opt/app/app.jar.new /opt/app/app.jar'"
-                echo "sh 'service app start'"
+                echo 'sh \'service app stop\''
+                echo 'sh \'mv /opt/app/app.jar.new /opt/app/app.jar\''
+                echo 'sh \'service app start\''
             }              
         }
     }
