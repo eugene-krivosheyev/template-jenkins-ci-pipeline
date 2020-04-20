@@ -7,7 +7,7 @@ pipeline {
 
     stages {
         stage('checkout') {
-            agent { node { label 'agent' } }
+            agent { node { label 'ci' } }
 
             steps {
                 checkout scm
@@ -15,7 +15,7 @@ pipeline {
         }
 
         stage('clean-build-test-qa-publish') {
-            agent { node { label 'agent' } }
+            agent { node { label 'ci' } }
 
             steps {
                 echo 'sh \'mvn clean deploy\''
