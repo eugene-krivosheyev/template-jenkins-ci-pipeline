@@ -29,7 +29,7 @@ pipeline {
 
 
         stage('transfer') {
-            agent { node { label 'prod' } }
+            agent { node { label 'pre_prod' } }
 
             steps {
                 echo 'sh \'mvn org.apache.maven.plugins:maven-dependency-plugin:2.4:get -Dtransitive=false -Ddest=/opt/app/app.jar.new -DremoteRepositories=artifacts::::http://1.1.1.1.:8081/artifactory/app -Dartifact=com.acme:app:1.0-SNAPSHOT\''
@@ -37,7 +37,7 @@ pipeline {
         }
 
         stage('deploy-db-schema') {
-            agent { node { label 'prod' } }
+            agent { node { label 'pre_prod' } }
 
             steps {
                 echo 'sh \'mvn liquibase:update\''
@@ -45,7 +45,7 @@ pipeline {
         }
 
         stage('deploy-application') {
-            agent { node { label 'prod' } }
+            agent { node { label 'pre_prod' } }
             
             steps {
                 echo 'sh \'service app stop\''
